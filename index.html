@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>US Natural Disasters Analysis (1953-2017) | Uma Maheswar Reddy V</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <style>
         :root {
@@ -147,7 +150,7 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-color);
-            z-index: 100;
+            z-index: 1000; /* Increased for Leaflet compatibility */
             padding: 1rem 2rem;
         }
 
@@ -270,6 +273,7 @@
             border-radius: var(--card-radius);
             padding: 2rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            z-index: 1;
         }
 
         .chart-header {
@@ -291,6 +295,19 @@
             position: relative;
             height: 400px;
             width: 100%;
+        }
+
+        /* Specific fix for Leaflet Map rounding */
+        #leafletChart {
+            border-radius: 8px;
+            z-index: 1; /* Keep map markers below sticky nav */
+        }
+
+        /* Leaflet Dark Mode Popup Styling */
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
         }
 
         .grid-half {
@@ -403,7 +420,7 @@
             </div>
             <ul class="nav-links">
                 <li><a href="#executive-summary">Executive Summary</a></li>
-                <li><a href="#visualizations">Visual Analytics</a></li>
+                <li><a href="#visualizations">Visual Analytics (10)</a></li>
                 <li><a href="#download">Report</a></li>
             </ul>
         </div>
@@ -439,16 +456,37 @@
 
         <section id="visualizations" class="section">
             <div class="section-header">
-                <h2>Visual Analytics</h2>
+                <h2>Visual Analytics Dashboard</h2>
                 <p class="section-description">
-                    Interactive representations of historical FEMA declaration data revealing temporal shifts, regional signatures, and categorical breakdowns.
+                    A suite of 10 interactive representations revealing temporal shifts, spatial hotspots, regional signatures, and categorical breakdowns.
                 </p>
             </div>
 
             <div class="dashboard-grid">
+                
+                <div class="grid-half" style="margin-top: 0;">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">1. National Disaster Density (Choropleth)</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <div id="choroplethChart" style="width: 100%; height: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">2. Regional Threat Hotspots (Interactive Map)</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <div id="leafletChart" style="width: 100%; height: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="chart-card">
                     <div class="chart-header">
-                        <div class="chart-title">1. Total US Natural Disaster Declarations (1953-2017)</div>
+                        <div class="chart-title">3. Total US Natural Disaster Declarations (1953-2017)</div>
                     </div>
                     <div class="chart-wrapper" style="height: 400px;">
                         <canvas id="timelineChart"></canvas>
@@ -458,7 +496,7 @@
                 <div class="grid-half" style="margin-top: 0;">
                     <div class="chart-card">
                         <div class="chart-header">
-                            <div class="chart-title">2. Monthly Seasonality: The Hurricane Effect</div>
+                            <div class="chart-title">4. Monthly Seasonality: The Hurricane Effect</div>
                         </div>
                         <div class="chart-wrapper">
                             <canvas id="monthlyChart"></canvas>
@@ -467,7 +505,7 @@
 
                     <div class="chart-card">
                         <div class="chart-header">
-                            <div class="chart-title">3. Highest Frequency States</div>
+                            <div class="chart-title">5. Highest Frequency States</div>
                         </div>
                         <div class="chart-wrapper">
                             <canvas id="statesChart"></canvas>
@@ -477,7 +515,7 @@
 
                 <div class="chart-card">
                     <div class="chart-header">
-                        <div class="chart-title">4. Top 15 Most Frequent Disaster Types</div>
+                        <div class="chart-title">6. Top 15 Most Frequent Disaster Types</div>
                     </div>
                     <div class="chart-wrapper" style="height: 400px;">
                         <canvas id="top15Chart"></canvas>
@@ -487,7 +525,7 @@
                 <div class="grid-half" style="margin-top: 0;">
                     <div class="chart-card">
                         <div class="chart-header">
-                            <div class="chart-title">5. Disaster Composition Structure</div>
+                            <div class="chart-title">7. Disaster Composition Structure</div>
                         </div>
                         <div class="chart-wrapper">
                             <div id="treemapChart" style="width: 100%; height: 100%;"></div>
@@ -496,7 +534,7 @@
 
                     <div class="chart-card">
                         <div class="chart-header">
-                            <div class="chart-title">6. Regional Threat Signatures</div>
+                            <div class="chart-title">8. Incident Heatmap by State</div>
                         </div>
                         <div class="chart-wrapper">
                             <div id="heatmapChart" style="width: 100%; height: 100%;"></div>
@@ -507,7 +545,7 @@
                 <div class="grid-half" style="margin-top: 0;">
                     <div class="chart-card">
                         <div class="chart-header">
-                            <div class="chart-title">7. Geographic Risk Breakdown (Top States)</div>
+                            <div class="chart-title">9. Geographic Risk Breakdown (Top States)</div>
                         </div>
                         <div class="chart-wrapper">
                             <canvas id="compositionChart"></canvas>
@@ -516,7 +554,7 @@
 
                     <div class="chart-card">
                         <div class="chart-header">
-                            <div class="chart-title">8. Federal Assistance by Incident Type</div>
+                            <div class="chart-title">10. Federal Assistance by Incident Type</div>
                         </div>
                         <div class="chart-wrapper">
                             <canvas id="assistanceChart"></canvas>
@@ -556,7 +594,73 @@
 
     <script>
         // ==========================================
-        // Chart.js Configurations (Charts 1, 2, 3, 4, 7, 8)
+        // 1 & 2: Geospatial Mapping (Plotly & Leaflet)
+        // ==========================================
+        
+        // 1. Plotly Choropleth Map
+        var choroData = [{
+            type: 'choropleth',
+            locationmode: 'USA-states',
+            locations: ['TX', 'CA', 'MO', 'KY', 'VA', 'OK', 'FL', 'IA', 'GA', 'LA', 'NC'],
+            z: [3850, 2800, 2280, 2030, 2000, 1900, 1520, 1480, 1410, 1390, 1330],
+            text: ['Multi-Threat', 'Fire Signature', 'Storm Belt', 'Storm Belt', 'Storm Belt', 'Storm Belt', 'Hurricane Zone', 'Storm Belt', 'Storm Belt', 'Gulf Coast Corridor', 'Storm Belt'],
+            colorscale: [ [0, '#262730'], [1, '#ff4b4b'] ],
+            colorbar: { 
+                title: 'Declarations', 
+                tickfont: {color: '#9aa0a6'}, 
+                titlefont: {color: '#9aa0a6'},
+                thickness: 15
+            },
+            marker: { line: {color: '#1e2027', width: 1} }
+        }];
+        var choroLayout = {
+            geo: { 
+                scope: 'usa', 
+                bgcolor: 'rgba(0,0,0,0)', 
+                showlakes: true, 
+                lakecolor: '#0e1117' 
+            },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            margin: {t: 10, l: 0, r: 0, b: 0}
+        };
+        Plotly.newPlot('choroplethChart', choroData, choroLayout, {displayModeBar: false, responsive: true});
+
+        // 2. Interactive Map (Folium Alternative via Leaflet.js)
+        var map = L.map('leafletChart', {
+            zoomControl: false // Move zoom to avoid covering data
+        }).setView([37.8, -96], 3); // Center on US
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        // Dark mode map tiles (CartoDB Dark Matter)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Regional Threat Hotspot Data
+        var hotspots = [
+            {name: "California", desc: "Dominance of Wildfires (Fire Signature)", lat: 36.77, lon: -119.41, color: "#ff7f0e", radius: 15},
+            {name: "Texas", desc: "Multi-Threat State (Hurricanes, Floods, Storms)", lat: 31.96, lon: -99.90, color: "#ff4b4b", radius: 20},
+            {name: "Florida", desc: "High Density of Hurricanes", lat: 27.99, lon: -81.76, color: "#9467bd", radius: 12},
+            {name: "Louisiana", desc: "Gulf Coast Corridor Exposure", lat: 30.98, lon: -91.96, color: "#9467bd", radius: 12},
+            {name: "Missouri", desc: "Midwestern Storm Belt Activity", lat: 38.57, lon: -92.17, color: "#1f77b4", radius: 10}
+        ];
+
+        hotspots.forEach(function(h) {
+            var circle = L.circleMarker([h.lat, h.lon], {
+                color: h.color,
+                fillColor: h.color,
+                fillOpacity: 0.6,
+                weight: 2,
+                radius: h.radius
+            }).addTo(map);
+            circle.bindPopup(`<b>${h.name}</b><br><span style="color:#9aa0a6">${h.desc}</span>`);
+        });
+
+        // ==========================================
+        // Chart.js Configurations (Charts 3, 4, 5, 6, 9, 10)
         // ==========================================
         Chart.defaults.color = '#9aa0a6';
         Chart.defaults.font.family = "'Inter', sans-serif";
@@ -570,7 +674,7 @@
         const gridOptions = { color: '#262730', drawBorder: false, tickLength: 0 };
         const commonInteraction = { mode: 'index', intersect: false };
 
-        // 1. Timeline Chart
+        // 3. Timeline Chart
         const timelineCtx = document.getElementById('timelineChart').getContext('2d');
         let gradientRed = timelineCtx.createLinearGradient(0, 0, 0, 400);
         gradientRed.addColorStop(0, 'rgba(255, 75, 75, 0.5)');
@@ -602,7 +706,7 @@
             }
         });
 
-        // 2. Monthly Seasonality Chart
+        // 4. Monthly Seasonality Chart
         const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
         new Chart(monthlyCtx, {
             type: 'bar',
@@ -621,7 +725,7 @@
             }
         });
 
-        // 3. States Chart
+        // 5. States Chart
         const statesCtx = document.getElementById('statesChart').getContext('2d');
         new Chart(statesCtx, {
             type: 'bar',
@@ -640,7 +744,7 @@
             }
         });
 
-        // 4. Top 15 Incident Types Chart
+        // 6. Top 15 Incident Types Chart
         const top15Ctx = document.getElementById('top15Chart').getContext('2d');
         new Chart(top15Ctx, {
             type: 'bar',
@@ -662,7 +766,7 @@
             }
         });
 
-        // 7. Geographic Composition Chart
+        // 9. Geographic Composition Chart
         const compCtx = document.getElementById('compositionChart').getContext('2d');
         new Chart(compCtx, {
             type: 'bar',
@@ -685,7 +789,7 @@
             }
         });
 
-        // 8. Assistance Chart
+        // 10. Assistance Chart
         const assistanceCtx = document.getElementById('assistanceChart').getContext('2d');
         new Chart(assistanceCtx, {
             type: 'bar',
@@ -707,10 +811,10 @@
         });
 
         // ==========================================
-        // Plotly.js Configurations (Charts 5 & 6)
+        // Plotly.js Configurations (Charts 7 & 8)
         // ==========================================
 
-        // 5. Treemap Chart
+        // 7. Treemap Chart
         var treemapData = [{
             type: "treemap",
             labels: ["Disasters", "Storm", "Flood", "Hurricane", "Snow", "Fire", "Ice", "Tornado"],
@@ -718,7 +822,7 @@
             values: [0, 16250, 9317, 8764, 3700, 2800, 2200, 1800],
             textinfo: "label+value",
             marker: { 
-                colorscale: [ [0, '#262730'], [1, '#1f77b4'] ] // Matches Streamlit/Chartjs blue
+                colorscale: [ [0, '#262730'], [1, '#1f77b4'] ]
             },
             hovertemplate: '<b>%{label}</b><br>Declarations: %{value}<extra></extra>'
         }];
@@ -730,7 +834,7 @@
         };
         Plotly.newPlot('treemapChart', treemapData, treemapLayout, {displayModeBar: false, responsive: true});
 
-        // 6. Heatmap Chart
+        // 8. Heatmap Chart
         var heatmapData = [{
             z: [
                 [1500, 1200, 800, 300, 200], // Storm
