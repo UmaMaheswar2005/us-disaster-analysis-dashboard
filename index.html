@@ -6,6 +6,8 @@
     <title>US Natural Disasters Analysis (1953-2017) | Uma Maheswar Reddy V</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    
     <style>
         :root {
             /* Streamlit-inspired Dark Theme */
@@ -43,10 +45,6 @@
             font-weight: 700;
             line-height: 1.2;
             letter-spacing: -0.5px;
-        }
-
-        .mono {
-            font-family: 'IBM Plex Mono', monospace;
         }
 
         /* Hero Section */
@@ -259,18 +257,11 @@
             line-height: 1.6;
         }
 
-        /* Chart Containers (Plotly Vibe) */
+        /* Chart Containers */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 2rem;
-        }
-
-        .grid-half {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
         }
 
         .chart-card {
@@ -302,7 +293,14 @@
             width: 100%;
         }
 
-        /* Simplified CTA / Download Section */
+        .grid-half {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Download Section */
         .cta-section {
             background: linear-gradient(145deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
             border: 1px solid var(--border-color);
@@ -375,7 +373,7 @@
 
     <div class="hero">
         <div class="hero-content">
-            <div class="project-tag">Data Science & Analytics</div>
+            <div class="project-tag">Data Visualization</div>
             <h1>US Natural Disasters Analysis</h1>
             <p class="hero-subtitle">A Comprehensive 64-Year Study (1953–2017)</p>
             <p class="author">Uma Maheswar Reddy V</p>
@@ -450,17 +448,17 @@
             <div class="dashboard-grid">
                 <div class="chart-card">
                     <div class="chart-header">
-                        <div class="chart-title">Total US Natural Disaster Declarations (1953-2017)</div>
+                        <div class="chart-title">1. Total US Natural Disaster Declarations (1953-2017)</div>
                     </div>
                     <div class="chart-wrapper" style="height: 400px;">
                         <canvas id="timelineChart"></canvas>
                     </div>
                 </div>
 
-                <div class="grid-half">
+                <div class="grid-half" style="margin-top: 0;">
                     <div class="chart-card">
                         <div class="chart-header">
-                            <div class="chart-title">Monthly Seasonality: The Hurricane Effect</div>
+                            <div class="chart-title">2. Monthly Seasonality: The Hurricane Effect</div>
                         </div>
                         <div class="chart-wrapper">
                             <canvas id="monthlyChart"></canvas>
@@ -469,7 +467,7 @@
 
                     <div class="chart-card">
                         <div class="chart-header">
-                            <div class="chart-title">Highest Frequency States</div>
+                            <div class="chart-title">3. Highest Frequency States</div>
                         </div>
                         <div class="chart-wrapper">
                             <canvas id="statesChart"></canvas>
@@ -477,19 +475,39 @@
                     </div>
                 </div>
 
-                <div class="chart-card" style="margin-top: 2rem;">
+                <div class="chart-card">
                     <div class="chart-header">
-                        <div class="chart-title">Top 15 Most Frequent Disaster Types</div>
+                        <div class="chart-title">4. Top 15 Most Frequent Disaster Types</div>
                     </div>
-                    <div class="chart-wrapper" style="height: 450px;">
+                    <div class="chart-wrapper" style="height: 400px;">
                         <canvas id="top15Chart"></canvas>
                     </div>
                 </div>
 
-                <div class="grid-half">
+                <div class="grid-half" style="margin-top: 0;">
                     <div class="chart-card">
                         <div class="chart-header">
-                            <div class="chart-title">Geographic Composition of Risk (Top States)</div>
+                            <div class="chart-title">5. Disaster Composition Structure</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <div id="treemapChart" style="width: 100%; height: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">6. Regional Threat Signatures</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <div id="heatmapChart" style="width: 100%; height: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-half" style="margin-top: 0;">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">7. Geographic Risk Breakdown (Top States)</div>
                         </div>
                         <div class="chart-wrapper">
                             <canvas id="compositionChart"></canvas>
@@ -498,7 +516,7 @@
 
                     <div class="chart-card">
                         <div class="chart-header">
-                            <div class="chart-title">Federal Assistance by Incident Type</div>
+                            <div class="chart-title">8. Federal Assistance by Incident Type</div>
                         </div>
                         <div class="chart-wrapper">
                             <canvas id="assistanceChart"></canvas>
@@ -537,7 +555,9 @@
     </footer>
 
     <script>
-        // Global Chart.js Defaults for a Plotly/Streamlit look
+        // ==========================================
+        // Chart.js Configurations (Charts 1, 2, 3, 4, 7, 8)
+        // ==========================================
         Chart.defaults.color = '#9aa0a6';
         Chart.defaults.font.family = "'Inter', sans-serif";
         Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(14, 17, 23, 0.9)';
@@ -547,16 +567,8 @@
         Chart.defaults.plugins.tooltip.borderColor = '#3b3d45';
         Chart.defaults.plugins.tooltip.borderWidth = 1;
 
-        const gridOptions = {
-            color: '#262730',
-            drawBorder: false,
-            tickLength: 0
-        };
-
-        const commonInteraction = {
-            mode: 'index',
-            intersect: false,
-        };
+        const gridOptions = { color: '#262730', drawBorder: false, tickLength: 0 };
+        const commonInteraction = { mode: 'index', intersect: false };
 
         // 1. Timeline Chart
         const timelineCtx = document.getElementById('timelineChart').getContext('2d');
@@ -584,14 +596,9 @@
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: commonInteraction,
+                responsive: true, maintainAspectRatio: false, interaction: commonInteraction,
                 plugins: { legend: { display: false } },
-                scales: {
-                    y: { beginAtZero: true, grid: gridOptions },
-                    x: { grid: { display: false } }
-                }
+                scales: { y: { beginAtZero: true, grid: gridOptions }, x: { grid: { display: false } } }
             }
         });
 
@@ -604,23 +611,17 @@
                 datasets: [{
                     label: 'Declarations',
                     data: [4600, 3500, 4600, 3600, 4200, 4000, 3900, 3600, 8300, 2700, 1300, 1700],
-                    backgroundColor: '#1f77b4',
-                    borderRadius: 4
+                    backgroundColor: '#1f77b4', borderRadius: 4
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: commonInteraction,
+                responsive: true, maintainAspectRatio: false, interaction: commonInteraction,
                 plugins: { legend: { display: false } },
-                scales: {
-                    y: { beginAtZero: true, grid: gridOptions },
-                    x: { grid: { display: false } }
-                }
+                scales: { y: { beginAtZero: true, grid: gridOptions }, x: { grid: { display: false } } }
             }
         });
 
-        // 3. States Chart (Horizontal Bar)
+        // 3. States Chart
         const statesCtx = document.getElementById('statesChart').getContext('2d');
         new Chart(statesCtx, {
             type: 'bar',
@@ -629,21 +630,13 @@
                 datasets: [{
                     label: 'Declarations',
                     data: [3850, 2280, 2030, 2000, 1900, 1520, 1480, 1410, 1390, 1330],
-                    backgroundColor: '#2ca02c',
-                    borderRadius: 4,
-                    barThickness: 'flex'
+                    backgroundColor: '#2ca02c', borderRadius: 4, barThickness: 'flex'
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y',
-                interaction: commonInteraction,
+                responsive: true, maintainAspectRatio: false, indexAxis: 'y', interaction: commonInteraction,
                 plugins: { legend: { display: false } },
-                scales: {
-                    x: { beginAtZero: true, grid: gridOptions },
-                    y: { grid: { display: false } }
-                }
+                scales: { x: { beginAtZero: true, grid: gridOptions }, y: { grid: { display: false } } }
             }
         });
 
@@ -656,65 +649,35 @@
                 datasets: [{
                     label: 'Count',
                     data: [16250, 9317, 8764, 3700, 2800, 2200, 1800, 1200, 500, 400, 300, 200, 100, 50, 50],
-                    backgroundColor: '#ff7f0e',
-                    borderRadius: 4
+                    backgroundColor: '#ff7f0e', borderRadius: 4
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: commonInteraction,
+                responsive: true, maintainAspectRatio: false, interaction: commonInteraction,
                 plugins: { legend: { display: false } },
                 scales: {
                     y: { beginAtZero: true, grid: gridOptions },
-                    x: { 
-                        grid: { display: false },
-                        ticks: { maxRotation: 45, minRotation: 45 }
-                    }
+                    x: { grid: { display: false }, ticks: { maxRotation: 45, minRotation: 45 } }
                 }
             }
         });
 
-        // 5. Geographic Composition (Stacked Bar)
+        // 7. Geographic Composition Chart
         const compCtx = document.getElementById('compositionChart').getContext('2d');
         new Chart(compCtx, {
             type: 'bar',
             data: {
                 labels: ['TX', 'MO', 'KY', 'VA', 'OK', 'FL', 'LA'],
                 datasets: [
-                    {
-                        label: 'Storm',
-                        data: [1500, 1200, 800, 500, 1000, 300, 300],
-                        backgroundColor: '#1f77b4',
-                        borderRadius: 2
-                    },
-                    {
-                        label: 'Hurricane',
-                        data: [1000, 0, 100, 800, 0, 900, 600],
-                        backgroundColor: '#9467bd',
-                        borderRadius: 2
-                    },
-                    {
-                        label: 'Flood',
-                        data: [800, 600, 500, 300, 400, 200, 400],
-                        backgroundColor: '#2ca02c',
-                        borderRadius: 2
-                    },
-                    {
-                        label: 'Fire',
-                        data: [550, 0, 0, 0, 500, 120, 0],
-                        backgroundColor: '#ff4b4b',
-                        borderRadius: 2
-                    }
+                    { label: 'Storm', data: [1500, 1200, 800, 500, 1000, 300, 300], backgroundColor: '#1f77b4', borderRadius: 2 },
+                    { label: 'Hurricane', data: [1000, 0, 100, 800, 0, 900, 600], backgroundColor: '#9467bd', borderRadius: 2 },
+                    { label: 'Flood', data: [800, 600, 500, 300, 400, 200, 400], backgroundColor: '#2ca02c', borderRadius: 2 },
+                    { label: 'Fire', data: [550, 0, 0, 0, 500, 120, 0], backgroundColor: '#ff4b4b', borderRadius: 2 }
                 ]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: commonInteraction,
-                plugins: { 
-                    legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } } 
-                },
+                responsive: true, maintainAspectRatio: false, interaction: commonInteraction,
+                plugins: { legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } } },
                 scales: {
                     y: { beginAtZero: true, stacked: true, grid: gridOptions },
                     x: { stacked: true, grid: { display: false } }
@@ -722,40 +685,79 @@
             }
         });
 
-        // 6. Assistance Chart (Stacked Bar)
+        // 8. Assistance Chart
         const assistanceCtx = document.getElementById('assistanceChart').getContext('2d');
         new Chart(assistanceCtx, {
             type: 'bar',
             data: {
                 labels: ['Storm', 'Hurricane', 'Flood', 'Snow', 'Fire', 'Tornado'],
-                datasets: [{
-                    label: 'Individual Housing Assistance',
-                    data: [4800, 2100, 8700, 1200, 180, 1600],
-                    backgroundColor: '#ff4b4b',
-                    borderRadius: 4
-                }, {
-                    label: 'Public Assistance Program',
-                    data: [15700, 9200, 9700, 3700, 2200, 1500],
-                    backgroundColor: '#1f77b4',
-                    borderRadius: 4
-                }]
+                datasets: [
+                    { label: 'Individual Housing Assistance', data: [4800, 2100, 8700, 1200, 180, 1600], backgroundColor: '#ff4b4b', borderRadius: 4 },
+                    { label: 'Public Assistance Program', data: [15700, 9200, 9700, 3700, 2200, 1500], backgroundColor: '#1f77b4', borderRadius: 4 }
+                ]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: commonInteraction,
-                plugins: { 
-                    legend: { 
-                        position: 'top',
-                        labels: { usePointStyle: true, boxWidth: 8 }
-                    } 
-                },
+                responsive: true, maintainAspectRatio: false, interaction: commonInteraction,
+                plugins: { legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } } },
                 scales: {
                     y: { beginAtZero: true, stacked: true, grid: gridOptions },
                     x: { stacked: true, grid: { display: false } }
                 }
             }
         });
+
+        // ==========================================
+        // Plotly.js Configurations (Charts 5 & 6)
+        // ==========================================
+
+        // 5. Treemap Chart
+        var treemapData = [{
+            type: "treemap",
+            labels: ["Disasters", "Storm", "Flood", "Hurricane", "Snow", "Fire", "Ice", "Tornado"],
+            parents: ["", "Disasters", "Disasters", "Disasters", "Disasters", "Disasters", "Disasters", "Disasters"],
+            values: [0, 16250, 9317, 8764, 3700, 2800, 2200, 1800],
+            textinfo: "label+value",
+            marker: { 
+                colorscale: [ [0, '#262730'], [1, '#1f77b4'] ] // Matches Streamlit/Chartjs blue
+            },
+            hovertemplate: '<b>%{label}</b><br>Declarations: %{value}<extra></extra>'
+        }];
+        var treemapLayout = {
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            margin: {t: 0, l: 0, r: 0, b: 0},
+            font: {family: 'Inter, sans-serif', color: '#fafafa', size: 14}
+        };
+        Plotly.newPlot('treemapChart', treemapData, treemapLayout, {displayModeBar: false, responsive: true});
+
+        // 6. Heatmap Chart
+        var heatmapData = [{
+            z: [
+                [1500, 1200, 800, 300, 200], // Storm
+                [800, 600, 500, 200, 400],   // Flood
+                [1000, 0, 100, 900, 0],      // Hurricane
+                [550, 0, 0, 120, 1100]       // Fire
+            ],
+            x: ['TX', 'MO', 'KY', 'FL', 'CA'],
+            y: ['Storm', 'Flood', 'Hurricane', 'Fire'],
+            type: 'heatmap',
+            colorscale: [
+                [0, '#262730'],      // Dark background for zero/low
+                [1, '#ff4b4b']       // Bright red for high intensity
+            ],
+            showscale: false,
+            hovertemplate: '<b>%{x}</b><br>%{y}<br>Count: %{z}<extra></extra>'
+        }];
+        var heatmapLayout = {
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            margin: {t: 10, l: 60, r: 10, b: 30},
+            font: {family: 'Inter, sans-serif', color: '#9aa0a6'},
+            xaxis: { showgrid: false, tickfont: {size: 13} },
+            yaxis: { showgrid: false, tickfont: {size: 13} }
+        };
+        Plotly.newPlot('heatmapChart', heatmapData, heatmapLayout, {displayModeBar: false, responsive: true});
+
     </script>
 </body>
 </html>
