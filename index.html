@@ -13,19 +13,25 @@
     
     <style>
         :root {
-            /* Streamlit-inspired Dark Theme */
-            --bg-primary: #0e1117;
-            --bg-secondary: #262730;
-            --bg-tertiary: #1e2027;
-            --accent-primary: #ff4b4b; /* Streamlit Red */
-            --accent-blue: #1f77b4;
-            --accent-orange: #ff7f0e;
-            --accent-green: #2ca02c;
-            --accent-purple: #9467bd;
-            --text-primary: #fafafa;
-            --text-secondary: #9aa0a6;
-            --border-color: #3b3d45;
-            --card-radius: 12px;
+            /* Modern Tech / Slate Theme */
+            --bg-primary: #0f172a;     /* Slate 900 */
+            --bg-secondary: #1e293b;   /* Slate 800 */
+            --bg-tertiary: #334155;    /* Slate 700 */
+            
+            /* Vibrant Accents */
+            --accent-primary: #3b82f6; /* Blue 500 */
+            --accent-cyan: #06b6d4;    /* Cyan 500 */
+            --accent-purple: #8b5cf6;  /* Violet 500 */
+            --accent-rose: #f43f5e;    /* Rose 500 */
+            --accent-emerald: #10b981; /* Emerald 500 */
+            --accent-amber: #f59e0b;   /* Amber 500 */
+            
+            /* Text & Borders */
+            --text-primary: #f8fafc;   /* Slate 50 */
+            --text-secondary: #94a3b8; /* Slate 400 */
+            --border-color: #334155;   /* Slate 700 */
+            
+            --card-radius: 16px;
             --transition-speed: 0.3s;
         }
 
@@ -43,7 +49,6 @@
             overflow-x: hidden;
         }
 
-        /* Typography */
         h1, h2, h3 {
             font-weight: 700;
             line-height: 1.2;
@@ -52,13 +57,13 @@
 
         /* Hero Section */
         .hero {
-            min-height: 90vh;
+            min-height: 85vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             position: relative;
-            background: radial-gradient(circle at 50% 0%, #262730 0%, #0e1117 70%);
+            background: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.15) 0%, #0f172a 70%);
             border-bottom: 1px solid var(--border-color);
             padding: 2rem;
         }
@@ -71,22 +76,25 @@
 
         .project-tag {
             display: inline-block;
-            padding: 0.5rem 1rem;
-            background: rgba(255, 75, 75, 0.1);
-            border: 1px solid var(--accent-primary);
-            color: var(--accent-primary);
+            padding: 0.5rem 1.2rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: var(--accent-cyan);
             font-size: 0.75rem;
             letter-spacing: 2px;
             margin-bottom: 1.5rem;
             text-transform: uppercase;
             font-weight: 600;
-            border-radius: 4px;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
         }
 
         h1 {
-            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-size: clamp(2.5rem, 6vw, 5rem);
             margin-bottom: 1rem;
-            color: #ffffff;
+            background: linear-gradient(to right, #f8fafc, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero-subtitle {
@@ -98,12 +106,12 @@
 
         .author {
             font-size: 1.1rem;
-            color: var(--text-primary);
+            color: var(--accent-cyan);
             margin-bottom: 3.5rem;
             font-weight: 500;
         }
 
-        /* Metric Cards (Hero) */
+        /* Metric Cards */
         .hero-stats {
             display: flex;
             gap: 2rem;
@@ -112,24 +120,28 @@
         }
 
         .stat-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: var(--card-radius);
-            padding: 1.5rem 2.5rem;
+            padding: 1.5rem 3rem;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform var(--transition-speed);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            transition: all var(--transition-speed);
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
-            border-color: var(--accent-primary);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.2);
         }
 
         .stat-number {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
-            color: var(--accent-primary);
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             display: block;
             margin-bottom: 0.25rem;
         }
@@ -138,19 +150,19 @@
             font-size: 0.85rem;
             color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 500;
+            letter-spacing: 1.5px;
+            font-weight: 600;
         }
 
-        /* Navigation */
+        /* Navigation (Glassmorphism) */
         .nav-bar {
             position: sticky;
             top: 0;
-            background: rgba(14, 17, 23, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            z-index: 1000; /* Increased for Leaflet compatibility */
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 1000;
             padding: 1rem 2rem;
         }
 
@@ -167,14 +179,16 @@
             color: var(--text-primary);
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
+            letter-spacing: 1px;
         }
 
         .nav-logo-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--accent-primary);
+            width: 10px;
+            height: 10px;
+            background: var(--accent-cyan);
             border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-cyan);
         }
 
         .nav-links {
@@ -192,7 +206,7 @@
         }
 
         .nav-links a:hover {
-            color: var(--text-primary);
+            color: var(--accent-cyan);
         }
 
         /* Main Container */
@@ -226,32 +240,53 @@
         /* Dashboard Insights Grid */
         .insights-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
             margin-top: 2rem;
         }
 
         .insight-card {
             background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(255,255,255,0.05);
             border-radius: var(--card-radius);
-            padding: 2rem;
-            border-left: 4px solid var(--accent-primary);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform var(--transition-speed);
+        }
+        
+        .insight-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .insight-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-cyan));
+        }
+
+        .insight-card:nth-child(2)::before {
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-rose));
+        }
+
+        .insight-card:nth-child(3)::before {
+            background: linear-gradient(90deg, var(--accent-emerald), var(--accent-cyan));
         }
 
         .insight-label {
             font-size: 0.85rem;
             color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             margin-bottom: 0.5rem;
         }
 
         .insight-value {
-            font-size: 1.75rem;
+            font-size: 2rem;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
         }
 
         .insight-desc {
@@ -264,16 +299,21 @@
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 2rem;
+            gap: 2.5rem;
         }
 
         .chart-card {
             background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(255,255,255,0.05);
             border-radius: var(--card-radius);
             padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.5);
             z-index: 1;
+            transition: border-color var(--transition-speed);
+        }
+
+        .chart-card:hover {
+            border-color: rgba(255,255,255,0.1);
         }
 
         .chart-header {
@@ -282,45 +322,46 @@
             align-items: center;
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
         .chart-title {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 600;
             color: var(--text-primary);
+            letter-spacing: -0.3px;
         }
 
         .chart-wrapper {
             position: relative;
-            height: 400px;
+            height: 420px;
             width: 100%;
         }
 
-        /* Specific fix for Leaflet Map rounding */
+        /* Leaflet Fixes */
         #leafletChart {
             border-radius: 8px;
-            z-index: 1; /* Keep map markers below sticky nav */
+            z-index: 1;
         }
 
-        /* Leaflet Dark Mode Popup Styling */
         .leaflet-popup-content-wrapper, .leaflet-popup-tip {
             background: var(--bg-secondary);
             color: var(--text-primary);
             border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
         .grid-half {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            gap: 2.5rem;
+            margin-top: 2.5rem;
         }
 
         /* Download Section */
         .cta-section {
-            background: linear-gradient(145deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-            border: 1px solid var(--border-color);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.2);
             border-radius: var(--card-radius);
             padding: 5rem 2rem;
             text-align: center;
@@ -329,47 +370,37 @@
             overflow: hidden;
         }
 
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--accent-primary);
-        }
-
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 1rem 2rem;
-            background: var(--accent-primary);
+            padding: 1.2rem 2.5rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-purple));
             color: #ffffff;
             text-decoration: none;
             font-weight: 600;
-            border-radius: 6px;
+            border-radius: 8px;
             transition: all var(--transition-speed);
-            font-size: 1rem;
+            font-size: 1.1rem;
             border: none;
             cursor: pointer;
+            box-shadow: 0 10px 20px -5px rgba(139, 92, 246, 0.4);
         }
 
         .btn:hover {
-            background: #ff3333;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 75, 75, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -5px rgba(139, 92, 246, 0.6);
         }
 
         .btn svg {
-            margin-right: 0.5rem;
+            margin-right: 0.75rem;
         }
 
         /* Footer */
         footer {
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
-            padding: 3rem 2rem;
+            background: var(--bg-primary);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 4rem 2rem;
             text-align: center;
         }
 
@@ -382,7 +413,8 @@
             .nav-links { display: none; }
             .grid-half { grid-template-columns: 1fr; }
             .hero-stats { gap: 1rem; }
-            .stat-card { padding: 1rem 1.5rem; width: 45%; }
+            .stat-card { padding: 1.5rem; width: 45%; }
+            .stat-number { font-size: 2rem; }
         }
     </style>
 </head>
@@ -441,12 +473,12 @@
                     <div class="insight-value">Escalating Trend</div>
                     <div class="insight-desc">Significant statistical increase in declarations over time. 2005 remains the absolute peak in recorded history.</div>
                 </div>
-                <div class="insight-card" style="border-left-color: var(--accent-orange)">
+                <div class="insight-card">
                     <div class="insight-label">Vulnerability Zones</div>
                     <div class="insight-value">TX & CA</div>
                     <div class="insight-desc">Texas and California dominate historical records, displaying highly distinct geographical threat signatures.</div>
                 </div>
-                <div class="insight-card" style="border-left-color: var(--accent-blue)">
+                <div class="insight-card">
                     <div class="insight-label">Federal Mechanics</div>
                     <div class="insight-value">Infrastructure First</div>
                     <div class="insight-desc">Public Assistance (PA) outpaces Individual Housing aid, positioning the government primarily as an infrastructure restorer.</div>
@@ -488,7 +520,7 @@
                     <div class="chart-header">
                         <div class="chart-title">3. Total US Natural Disaster Declarations (1953-2017)</div>
                     </div>
-                    <div class="chart-wrapper" style="height: 400px;">
+                    <div class="chart-wrapper">
                         <canvas id="timelineChart"></canvas>
                     </div>
                 </div>
@@ -517,7 +549,7 @@
                     <div class="chart-header">
                         <div class="chart-title">6. Top 15 Most Frequent Disaster Types</div>
                     </div>
-                    <div class="chart-wrapper" style="height: 400px;">
+                    <div class="chart-wrapper">
                         <canvas id="top15Chart"></canvas>
                     </div>
                 </div>
@@ -566,11 +598,11 @@
 
         <section id="download" class="cta-section">
             <h2>Comprehensive Project Report</h2>
-            <p class="section-description" style="margin: 1rem auto 2.5rem; max-width: 600px; text-align: center;">
+            <p class="section-description" style="margin: 1rem auto 2.5rem; max-width: 600px; text-align: center; color: #cbd5e1;">
                 Review the complete methodology, deep-dive analytics, data cleaning processes, and structural findings in the official project document.
             </p>
             <a href="./Insightsv.pdf" download class="btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="7 10 12 15 17 10"></polyline>
                     <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -582,17 +614,33 @@
 
     <footer>
         <div class="footer-content">
-            <p style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary);">Uma Maheswar Reddy V</p>
+            <p style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); letter-spacing: 1px;">UMA MAHESWAR REDDY V</p>
             <p style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 0.9rem;">
                 Data Science Internship Project | US Natural Disasters Analysis
             </p>
-            <p style="margin-top: 2rem; color: var(--border-color); font-size: 0.8rem;">
+            <p style="margin-top: 2rem; color: #475569; font-size: 0.8rem;">
                 © 2024
             </p>
         </div>
     </footer>
 
     <script>
+        // ==========================================
+        // Palette Definition matching CSS
+        // ==========================================
+        const colors = {
+            bgSecondary: '#1e293b',
+            textPrimary: '#f8fafc',
+            textSecondary: '#94a3b8',
+            blue: '#3b82f6',
+            cyan: '#06b6d4',
+            purple: '#8b5cf6',
+            rose: '#f43f5e',
+            emerald: '#10b981',
+            amber: '#f59e0b',
+            gridColor: 'rgba(255, 255, 255, 0.05)'
+        };
+
         // ==========================================
         // 1 & 2: Geospatial Mapping (Plotly & Leaflet)
         // ==========================================
@@ -604,81 +652,80 @@
             locations: ['TX', 'CA', 'MO', 'KY', 'VA', 'OK', 'FL', 'IA', 'GA', 'LA', 'NC'],
             z: [3850, 2800, 2280, 2030, 2000, 1900, 1520, 1480, 1410, 1390, 1330],
             text: ['Multi-Threat', 'Fire Signature', 'Storm Belt', 'Storm Belt', 'Storm Belt', 'Storm Belt', 'Hurricane Zone', 'Storm Belt', 'Storm Belt', 'Gulf Coast Corridor', 'Storm Belt'],
-            colorscale: [ [0, '#262730'], [1, '#ff4b4b'] ],
+            colorscale: [ [0, colors.bgSecondary], [1, colors.rose] ],
             colorbar: { 
                 title: 'Declarations', 
-                tickfont: {color: '#9aa0a6'}, 
-                titlefont: {color: '#9aa0a6'},
-                thickness: 15
+                tickfont: {color: colors.textSecondary}, 
+                titlefont: {color: colors.textSecondary},
+                thickness: 10,
+                outlinewidth: 0
             },
-            marker: { line: {color: '#1e2027', width: 1} }
+            marker: { line: {color: colors.bgSecondary, width: 1} }
         }];
         var choroLayout = {
             geo: { 
                 scope: 'usa', 
                 bgcolor: 'rgba(0,0,0,0)', 
                 showlakes: true, 
-                lakecolor: '#0e1117' 
+                lakecolor: '#0f172a' 
             },
             paper_bgcolor: 'rgba(0,0,0,0)',
             plot_bgcolor: 'rgba(0,0,0,0)',
-            margin: {t: 10, l: 0, r: 0, b: 0}
+            margin: {t: 0, l: 0, r: 0, b: 0}
         };
         Plotly.newPlot('choroplethChart', choroData, choroLayout, {displayModeBar: false, responsive: true});
 
-        // 2. Interactive Map (Folium Alternative via Leaflet.js)
+        // 2. Interactive Map (Leaflet.js)
         var map = L.map('leafletChart', {
-            zoomControl: false // Move zoom to avoid covering data
-        }).setView([37.8, -96], 3); // Center on US
+            zoomControl: false
+        }).setView([37.8, -96], 3);
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-        // Dark mode map tiles (CartoDB Dark Matter)
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            attribution: '&copy; OpenStreetMap &copy; CARTO',
             subdomains: 'abcd',
             maxZoom: 19
         }).addTo(map);
 
-        // Regional Threat Hotspot Data
         var hotspots = [
-            {name: "California", desc: "Dominance of Wildfires (Fire Signature)", lat: 36.77, lon: -119.41, color: "#ff7f0e", radius: 15},
-            {name: "Texas", desc: "Multi-Threat State (Hurricanes, Floods, Storms)", lat: 31.96, lon: -99.90, color: "#ff4b4b", radius: 20},
-            {name: "Florida", desc: "High Density of Hurricanes", lat: 27.99, lon: -81.76, color: "#9467bd", radius: 12},
-            {name: "Louisiana", desc: "Gulf Coast Corridor Exposure", lat: 30.98, lon: -91.96, color: "#9467bd", radius: 12},
-            {name: "Missouri", desc: "Midwestern Storm Belt Activity", lat: 38.57, lon: -92.17, color: "#1f77b4", radius: 10}
+            {name: "California", desc: "Dominance of Wildfires (Fire Signature)", lat: 36.77, lon: -119.41, color: colors.amber, radius: 14},
+            {name: "Texas", desc: "Multi-Threat State (Hurricanes, Floods, Storms)", lat: 31.96, lon: -99.90, color: colors.rose, radius: 18},
+            {name: "Florida", desc: "High Density of Hurricanes", lat: 27.99, lon: -81.76, color: colors.purple, radius: 12},
+            {name: "Louisiana", desc: "Gulf Coast Corridor Exposure", lat: 30.98, lon: -91.96, color: colors.purple, radius: 11},
+            {name: "Missouri", desc: "Midwestern Storm Belt Activity", lat: 38.57, lon: -92.17, color: colors.cyan, radius: 10}
         ];
 
         hotspots.forEach(function(h) {
             var circle = L.circleMarker([h.lat, h.lon], {
                 color: h.color,
                 fillColor: h.color,
-                fillOpacity: 0.6,
+                fillOpacity: 0.4,
                 weight: 2,
                 radius: h.radius
             }).addTo(map);
-            circle.bindPopup(`<b>${h.name}</b><br><span style="color:#9aa0a6">${h.desc}</span>`);
+            circle.bindPopup(`<b style="color:${colors.textPrimary}">${h.name}</b><br><span style="color:${colors.textSecondary}">${h.desc}</span>`);
         });
 
         // ==========================================
-        // Chart.js Configurations (Charts 3, 4, 5, 6, 9, 10)
+        // Chart.js Global Config
         // ==========================================
-        Chart.defaults.color = '#9aa0a6';
+        Chart.defaults.color = colors.textSecondary;
         Chart.defaults.font.family = "'Inter', sans-serif";
-        Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(14, 17, 23, 0.9)';
+        Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15, 23, 42, 0.9)';
         Chart.defaults.plugins.tooltip.titleColor = '#fff';
         Chart.defaults.plugins.tooltip.padding = 12;
         Chart.defaults.plugins.tooltip.cornerRadius = 8;
-        Chart.defaults.plugins.tooltip.borderColor = '#3b3d45';
+        Chart.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,0.1)';
         Chart.defaults.plugins.tooltip.borderWidth = 1;
 
-        const gridOptions = { color: '#262730', drawBorder: false, tickLength: 0 };
+        const gridOptions = { color: colors.gridColor, drawBorder: false, tickLength: 0 };
         const commonInteraction = { mode: 'index', intersect: false };
 
         // 3. Timeline Chart
         const timelineCtx = document.getElementById('timelineChart').getContext('2d');
-        let gradientRed = timelineCtx.createLinearGradient(0, 0, 0, 400);
-        gradientRed.addColorStop(0, 'rgba(255, 75, 75, 0.5)');
-        gradientRed.addColorStop(1, 'rgba(255, 75, 75, 0.0)');
+        let gradientBlue = timelineCtx.createLinearGradient(0, 0, 0, 400);
+        gradientBlue.addColorStop(0, 'rgba(6, 182, 212, 0.4)'); // Cyan transparent
+        gradientBlue.addColorStop(1, 'rgba(6, 182, 212, 0.0)');
 
         new Chart(timelineCtx, {
             type: 'line',
@@ -687,15 +734,15 @@
                 datasets: [{
                     label: 'Declarations',
                     data: [50, 100, 250, 350, 600, 1200, 4600, 2300, 2700, 1200],
-                    borderColor: '#ff4b4b',
-                    backgroundColor: gradientRed,
+                    borderColor: colors.cyan,
+                    backgroundColor: gradientBlue,
                     borderWidth: 3,
                     fill: true,
                     tension: 0.4, 
                     pointRadius: 4,
                     pointHoverRadius: 8,
-                    pointBackgroundColor: '#ff4b4b',
-                    pointBorderColor: '#0e1117',
+                    pointBackgroundColor: colors.cyan,
+                    pointBorderColor: '#0f172a',
                     pointBorderWidth: 2
                 }]
             },
@@ -715,7 +762,7 @@
                 datasets: [{
                     label: 'Declarations',
                     data: [4600, 3500, 4600, 3600, 4200, 4000, 3900, 3600, 8300, 2700, 1300, 1700],
-                    backgroundColor: '#1f77b4', borderRadius: 4
+                    backgroundColor: colors.emerald, borderRadius: 6
                 }]
             },
             options: {
@@ -734,7 +781,7 @@
                 datasets: [{
                     label: 'Declarations',
                     data: [3850, 2280, 2030, 2000, 1900, 1520, 1480, 1410, 1390, 1330],
-                    backgroundColor: '#2ca02c', borderRadius: 4, barThickness: 'flex'
+                    backgroundColor: colors.purple, borderRadius: 6, barThickness: 'flex'
                 }]
             },
             options: {
@@ -753,7 +800,7 @@
                 datasets: [{
                     label: 'Count',
                     data: [16250, 9317, 8764, 3700, 2800, 2200, 1800, 1200, 500, 400, 300, 200, 100, 50, 50],
-                    backgroundColor: '#ff7f0e', borderRadius: 4
+                    backgroundColor: colors.amber, borderRadius: 6
                 }]
             },
             options: {
@@ -773,15 +820,15 @@
             data: {
                 labels: ['TX', 'MO', 'KY', 'VA', 'OK', 'FL', 'LA'],
                 datasets: [
-                    { label: 'Storm', data: [1500, 1200, 800, 500, 1000, 300, 300], backgroundColor: '#1f77b4', borderRadius: 2 },
-                    { label: 'Hurricane', data: [1000, 0, 100, 800, 0, 900, 600], backgroundColor: '#9467bd', borderRadius: 2 },
-                    { label: 'Flood', data: [800, 600, 500, 300, 400, 200, 400], backgroundColor: '#2ca02c', borderRadius: 2 },
-                    { label: 'Fire', data: [550, 0, 0, 0, 500, 120, 0], backgroundColor: '#ff4b4b', borderRadius: 2 }
+                    { label: 'Storm', data: [1500, 1200, 800, 500, 1000, 300, 300], backgroundColor: colors.blue, borderRadius: 4 },
+                    { label: 'Hurricane', data: [1000, 0, 100, 800, 0, 900, 600], backgroundColor: colors.purple, borderRadius: 4 },
+                    { label: 'Flood', data: [800, 600, 500, 300, 400, 200, 400], backgroundColor: colors.emerald, borderRadius: 4 },
+                    { label: 'Fire', data: [550, 0, 0, 0, 500, 120, 0], backgroundColor: colors.rose, borderRadius: 4 }
                 ]
             },
             options: {
                 responsive: true, maintainAspectRatio: false, interaction: commonInteraction,
-                plugins: { legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } } },
+                plugins: { legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8, color: colors.textPrimary } } },
                 scales: {
                     y: { beginAtZero: true, stacked: true, grid: gridOptions },
                     x: { stacked: true, grid: { display: false } }
@@ -796,13 +843,13 @@
             data: {
                 labels: ['Storm', 'Hurricane', 'Flood', 'Snow', 'Fire', 'Tornado'],
                 datasets: [
-                    { label: 'Individual Housing Assistance', data: [4800, 2100, 8700, 1200, 180, 1600], backgroundColor: '#ff4b4b', borderRadius: 4 },
-                    { label: 'Public Assistance Program', data: [15700, 9200, 9700, 3700, 2200, 1500], backgroundColor: '#1f77b4', borderRadius: 4 }
+                    { label: 'Individual Housing Assistance', data: [4800, 2100, 8700, 1200, 180, 1600], backgroundColor: colors.rose, borderRadius: 4 },
+                    { label: 'Public Assistance Program', data: [15700, 9200, 9700, 3700, 2200, 1500], backgroundColor: colors.cyan, borderRadius: 4 }
                 ]
             },
             options: {
                 responsive: true, maintainAspectRatio: false, interaction: commonInteraction,
-                plugins: { legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } } },
+                plugins: { legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8, color: colors.textPrimary } } },
                 scales: {
                     y: { beginAtZero: true, stacked: true, grid: gridOptions },
                     x: { stacked: true, grid: { display: false } }
@@ -822,7 +869,7 @@
             values: [0, 16250, 9317, 8764, 3700, 2800, 2200, 1800],
             textinfo: "label+value",
             marker: { 
-                colorscale: [ [0, '#262730'], [1, '#1f77b4'] ]
+                colorscale: [ [0, colors.bgSecondary], [1, colors.blue] ]
             },
             hovertemplate: '<b>%{label}</b><br>Declarations: %{value}<extra></extra>'
         }];
@@ -830,7 +877,7 @@
             paper_bgcolor: 'rgba(0,0,0,0)',
             plot_bgcolor: 'rgba(0,0,0,0)',
             margin: {t: 0, l: 0, r: 0, b: 0},
-            font: {family: 'Inter, sans-serif', color: '#fafafa', size: 14}
+            font: {family: 'Inter, sans-serif', color: colors.textPrimary, size: 14}
         };
         Plotly.newPlot('treemapChart', treemapData, treemapLayout, {displayModeBar: false, responsive: true});
 
@@ -846,8 +893,8 @@
             y: ['Storm', 'Flood', 'Hurricane', 'Fire'],
             type: 'heatmap',
             colorscale: [
-                [0, '#262730'],      // Dark background for zero/low
-                [1, '#ff4b4b']       // Bright red for high intensity
+                [0, colors.bgSecondary], 
+                [1, colors.amber]       
             ],
             showscale: false,
             hovertemplate: '<b>%{x}</b><br>%{y}<br>Count: %{z}<extra></extra>'
@@ -855,8 +902,8 @@
         var heatmapLayout = {
             paper_bgcolor: 'rgba(0,0,0,0)',
             plot_bgcolor: 'rgba(0,0,0,0)',
-            margin: {t: 10, l: 60, r: 10, b: 30},
-            font: {family: 'Inter, sans-serif', color: '#9aa0a6'},
+            margin: {t: 10, l: 65, r: 10, b: 30},
+            font: {family: 'Inter, sans-serif', color: colors.textSecondary},
             xaxis: { showgrid: false, tickfont: {size: 13} },
             yaxis: { showgrid: false, tickfont: {size: 13} }
         };
