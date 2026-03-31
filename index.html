@@ -16,6 +16,7 @@
             --accent-blue: #1f77b4;
             --accent-orange: #ff7f0e;
             --accent-green: #2ca02c;
+            --accent-purple: #9467bd;
             --text-primary: #fafafa;
             --text-secondary: #9aa0a6;
             --border-color: #3b3d45;
@@ -258,45 +259,18 @@
             line-height: 1.6;
         }
 
-        /* Methodology/Milestones */
-        .milestone-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .milestone-card {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--card-radius);
-            padding: 2.5rem;
-            transition: all var(--transition-speed);
-        }
-
-        .milestone-card:hover {
-            background: var(--bg-secondary);
-            border-color: var(--accent-blue);
-        }
-
-        .milestone-number {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--accent-blue);
-            margin-bottom: 1.5rem;
-            opacity: 0.8;
-        }
-
-        .milestone-title {
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
-        }
-
         /* Chart Containers (Plotly Vibe) */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 2rem;
+        }
+
+        .grid-half {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
         .chart-card {
@@ -326,13 +300,6 @@
             position: relative;
             height: 400px;
             width: 100%;
-        }
-
-        .grid-half {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
         }
 
         /* Simplified CTA / Download Section */
@@ -476,7 +443,7 @@
             <div class="section-header">
                 <h2>Visual Analytics</h2>
                 <p class="section-description">
-                    Interactive representations of historical FEMA declaration data revealing temporal shifts and categorical breakdown.
+                    Interactive representations of historical FEMA declaration data revealing temporal shifts, regional signatures, and categorical breakdowns.
                 </p>
             </div>
 
@@ -485,12 +452,21 @@
                     <div class="chart-header">
                         <div class="chart-title">Total US Natural Disaster Declarations (1953-2017)</div>
                     </div>
-                    <div class="chart-wrapper" style="height: 450px;">
+                    <div class="chart-wrapper" style="height: 400px;">
                         <canvas id="timelineChart"></canvas>
                     </div>
                 </div>
 
                 <div class="grid-half">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">Monthly Seasonality: The Hurricane Effect</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="monthlyChart"></canvas>
+                        </div>
+                    </div>
+
                     <div class="chart-card">
                         <div class="chart-header">
                             <div class="chart-title">Highest Frequency States</div>
@@ -499,23 +475,34 @@
                             <canvas id="statesChart"></canvas>
                         </div>
                     </div>
-
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <div class="chart-title">Primary Incident Categories</div>
-                        </div>
-                        <div class="chart-wrapper">
-                            <canvas id="incidentChart"></canvas>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="chart-card" style="margin-top: 2rem;">
                     <div class="chart-header">
-                        <div class="chart-title">Federal Assistance Allocation by Incident Type</div>
+                        <div class="chart-title">Top 15 Most Frequent Disaster Types</div>
                     </div>
-                    <div class="chart-wrapper">
-                        <canvas id="assistanceChart"></canvas>
+                    <div class="chart-wrapper" style="height: 450px;">
+                        <canvas id="top15Chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="grid-half">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">Geographic Composition of Risk (Top States)</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="compositionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">Federal Assistance by Incident Type</div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="assistanceChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -526,7 +513,7 @@
             <p class="section-description" style="margin: 1rem auto 2.5rem; max-width: 600px; text-align: center;">
                 Review the complete methodology, deep-dive analytics, data cleaning processes, and structural findings in the official project document.
             </p>
-            <a href="/mnt/user-data/uploads/Insightsv.pdf" download class="btn">
+            <a href="./Insightsv.pdf" download class="btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="7 10 12 15 17 10"></polyline>
@@ -571,7 +558,7 @@
             intersect: false,
         };
 
-        // Timeline Chart
+        // 1. Timeline Chart
         const timelineCtx = document.getElementById('timelineChart').getContext('2d');
         let gradientRed = timelineCtx.createLinearGradient(0, 0, 0, 400);
         gradientRed.addColorStop(0, 'rgba(255, 75, 75, 0.5)');
@@ -588,7 +575,7 @@
                     backgroundColor: gradientRed,
                     borderWidth: 3,
                     fill: true,
-                    tension: 0.4, // Smooth curves
+                    tension: 0.4, 
                     pointRadius: 4,
                     pointHoverRadius: 8,
                     pointBackgroundColor: '#ff4b4b',
@@ -608,7 +595,32 @@
             }
         });
 
-        // States Chart (Horizontal Bar)
+        // 2. Monthly Seasonality Chart
+        const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+        new Chart(monthlyCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Declarations',
+                    data: [4600, 3500, 4600, 3600, 4200, 4000, 3900, 3600, 8300, 2700, 1300, 1700],
+                    backgroundColor: '#1f77b4',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: commonInteraction,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: gridOptions },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 3. States Chart (Horizontal Bar)
         const statesCtx = document.getElementById('statesChart').getContext('2d');
         new Chart(statesCtx, {
             type: 'bar',
@@ -617,8 +629,8 @@
                 datasets: [{
                     label: 'Declarations',
                     data: [3850, 2280, 2030, 2000, 1900, 1520, 1480, 1410, 1390, 1330],
-                    backgroundColor: '#1f77b4',
-                    borderRadius: 4, // Rounded bars
+                    backgroundColor: '#2ca02c',
+                    borderRadius: 4,
                     barThickness: 'flex'
                 }]
             },
@@ -635,15 +647,15 @@
             }
         });
 
-        // Incident Chart
-        const incidentCtx = document.getElementById('incidentChart').getContext('2d');
-        new Chart(incidentCtx, {
+        // 4. Top 15 Incident Types Chart
+        const top15Ctx = document.getElementById('top15Chart').getContext('2d');
+        new Chart(top15Ctx, {
             type: 'bar',
             data: {
-                labels: ['Storm', 'Flood', 'Hurricane', 'Snow', 'Fire', 'Ice', 'Tornado'],
+                labels: ['Storm', 'Flood', 'Hurricane', 'Snow', 'Fire', 'Ice', 'Tornado', 'Drought', 'Winter', 'Other', 'Typhoon', 'Earthquake', 'Volcano', 'Water', 'Chemical'],
                 datasets: [{
                     label: 'Count',
-                    data: [16250, 9317, 8764, 3700, 2800, 2200, 1800],
+                    data: [16250, 9317, 8764, 3700, 2800, 2200, 1800, 1200, 500, 400, 300, 200, 100, 50, 50],
                     backgroundColor: '#ff7f0e',
                     borderRadius: 4
                 }]
@@ -655,12 +667,62 @@
                 plugins: { legend: { display: false } },
                 scales: {
                     y: { beginAtZero: true, grid: gridOptions },
-                    x: { grid: { display: false } }
+                    x: { 
+                        grid: { display: false },
+                        ticks: { maxRotation: 45, minRotation: 45 }
+                    }
                 }
             }
         });
 
-        // Assistance Chart (Stacked Bar)
+        // 5. Geographic Composition (Stacked Bar)
+        const compCtx = document.getElementById('compositionChart').getContext('2d');
+        new Chart(compCtx, {
+            type: 'bar',
+            data: {
+                labels: ['TX', 'MO', 'KY', 'VA', 'OK', 'FL', 'LA'],
+                datasets: [
+                    {
+                        label: 'Storm',
+                        data: [1500, 1200, 800, 500, 1000, 300, 300],
+                        backgroundColor: '#1f77b4',
+                        borderRadius: 2
+                    },
+                    {
+                        label: 'Hurricane',
+                        data: [1000, 0, 100, 800, 0, 900, 600],
+                        backgroundColor: '#9467bd',
+                        borderRadius: 2
+                    },
+                    {
+                        label: 'Flood',
+                        data: [800, 600, 500, 300, 400, 200, 400],
+                        backgroundColor: '#2ca02c',
+                        borderRadius: 2
+                    },
+                    {
+                        label: 'Fire',
+                        data: [550, 0, 0, 0, 500, 120, 0],
+                        backgroundColor: '#ff4b4b',
+                        borderRadius: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: commonInteraction,
+                plugins: { 
+                    legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } } 
+                },
+                scales: {
+                    y: { beginAtZero: true, stacked: true, grid: gridOptions },
+                    x: { stacked: true, grid: { display: false } }
+                }
+            }
+        });
+
+        // 6. Assistance Chart (Stacked Bar)
         const assistanceCtx = document.getElementById('assistanceChart').getContext('2d');
         new Chart(assistanceCtx, {
             type: 'bar',
